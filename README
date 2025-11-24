@@ -7,6 +7,7 @@ This is a personal fork of [dwm](https://dwm.suckless.org/) - a dynamic window m
 This fork includes the following patches:
 - **attachaside** - New windows attach at the side of the focused window
 - **movestack** - Move clients up/down in the stack (Mod+Shift+j/k)
+- **systray** - System tray support in the status bar
 - **vanitygaps** - Configurable gaps between windows
 - **restartsig** - Restart dwm with signals or Mod+Ctrl+Shift+q
 - **autostart** - Automatically run scripts on startup
@@ -104,11 +105,10 @@ The status bar automatically displays (updated every second via autostart script
 All patches are located in the `patches/` directory:
 - `dwm-attachaside-6.6.diff`
 - `dwm-movestack-20211115-a786211.diff`
+- `dwm-systray-6.6.diff`
 - `dwm-vanitygaps-20190508-6.2.diff`
 - `dwm-restartsig-20180523-6.2.diff`
 - `dwm-autostart-20210120-cb3f58a.diff`
-
-Note: The systray patch file remains in the patches directory but is not applied (systray support was removed).
 
 ## License
 
