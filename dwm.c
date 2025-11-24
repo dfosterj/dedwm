@@ -48,10 +48,13 @@
 #define WIDTH(X)                ((X)->w + 2 * (X)->bw)
 #define HEIGHT(X)               ((X)->h + 2 * (X)->bw)
 #define TAGMASK                 ((1 << LENGTH(tags)) - 1)
-#define TEXTW(X)                (drw_fontset_getwidth(drw, (X)) + lrpad)
 
 #define MAX(A, B)               ((A) > (B) ? (A) : (B))
 #define MIN(A, B)               ((A) < (B) ? (A) : (B))
+
+/* LASTEvent is 35 in X11 (GenericEvent + 1) */
+#define LASTEvent               35
+
 
 /* enums */
 enum { CurNormal, CurResize, CurMove, CurLast }; /* cursor */
@@ -294,9 +297,9 @@ static void monocle(Monitor *m);
 static void tile(Monitor *);
 
 static Layout layouts[] = {
-	{ "[M]", monocle },
-	{ "[F]", NULL },
 	{ "[T]", tile },
+	{ "[F]", NULL },
+	{ "[M]", monocle },
 };
 
 /* configuration, allows nested code to access above variables */
@@ -366,8 +369,8 @@ void setmfact(const Arg *arg) { float f; if (!arg || !selmon->sel) return; f = a
 void setup(void) { sigchld(0); screen = DefaultScreen(dpy); root = RootWindow(dpy, screen); sw = DisplayWidth(dpy, screen); sh = DisplayHeight(dpy, screen); wmatom[WMProtocols] = XInternAtom(dpy, "WM_PROTOCOLS", False); wmatom[WMDelete] = XInternAtom(dpy, "WM_DELETE_WINDOW", False); wmatom[WMState] = XInternAtom(dpy, "WM_STATE", False); wmatom[WMTakeFocus] = XInternAtom(dpy, "WM_TAKE_FOCUS", False); XSetErrorHandler(xerror); XSync(dpy, False); XSetErrorHandler(xerror); XSelectInput(dpy, root, SubstructureRedirectMask|SubstructureNotifyMask|ButtonPressMask|PointerMotionMask|EnterWindowMask|LeaveWindowMask|StructureNotifyMask|PropertyChangeMask); grabkeys(); updategeom(); createmon(); }
 void seturgent(Client *c, int urg) {}
 void showhide(Client *c) { if (!c) return; if (ISVISIBLE(c)) { XMoveWindow(dpy, c->win, c->x, c->y); if (!c->mon->sel || c->mon->sel->isfloating || !c->mon->sel) resize(c, c->x, c->y, c->w, c->h, 0); showhide(c->snext); } else { showhide(c->snext); XMoveWindow(dpy, c->win, WIDTH(c) * -2, c->y); } }
-void sigchld(int unused) { if (signal(SIGCHLD, sigchld) == SIG_ERR) die("can't install SIGCHLD handler:"); while (0 < waitpid(-1, NULL, WNOHANG)); }
-void spawn(const Arg *arg) { if (fork() == 0) { if (dpy) close(ConnectionNumber(dpy)); setsid(); execvp(((char **)arg->v)[0], (char **)arg->v); fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]); perror(" failed"); exit(EXIT_SUCCESS); } }
+void sigchld(int unused) { if (signal(SIGCHLD, sigchld) == SIG_ERR) die("can't install SIGCHLD handler"); while (0 < waitpid(-1, NULL, WNOHANG)); }
+void spawn(const Arg *arg) { if (fork() == 0) { if (dpy) close(ConnectionNumber(dpy)); setsid(); execvp(((char **)arg->v)[0], (char **)arg->v); fprintf(stderr, "dwm: execvp %s", ((char **)arg->v)[0]); perror(" failed"); exit(EXIT_FAILURE); } }
 void tag(const Arg *arg) { if (selmon->sel && arg->ui & TAGMASK) { selmon->sel->tags = arg->ui & TAGMASK; focus(NULL); arrange(selmon); } }
 void tagmon(const Arg *arg) {}
 void tile(Monitor *m) { unsigned int i, n, h, mw, my, ty; Client *c; for (n = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), n++); if (n == 0) return; if (n > m->nmaster) mw = m->nmaster ? m->ww * m->mfact : 0; else mw = m->ww; for (i = my = ty = 0, c = nexttiled(m->clients); c; c = nexttiled(c->next), i++) if (i < m->nmaster) { h = (m->wh - my) / (MIN(n, m->nmaster) - i); resize(c, m->wx, m->wy + my, mw - (2*c->bw), h - (2*c->bw), 0); my += HEIGHT(c); } else { h = (m->wh - ty) / (n - i); resize(c, m->wx + mw, m->wy + ty, m->ww - mw - (2*c->bw), h - (2*c->bw), 0); ty += HEIGHT(c); } }
