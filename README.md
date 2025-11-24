@@ -1,2 +1,0 @@
-# dedwm
-dwm
