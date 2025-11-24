@@ -74,8 +74,3 @@ while true; do
 	xsetroot -name "${batt} | ${wifi} | ${vol} | ${time}"
 	sleep 1
 done
-
-
-# set keyboard layout
-setxkbmap -layout us
-
