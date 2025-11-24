@@ -199,6 +199,7 @@ static void focusstack(const Arg *arg);
 static Atom getatomprop(Client *c, Atom prop);
 static int getrootptr(int *x, int *y);
 static long getstate(Window w);
+static unsigned int getsystraywidth(void);
 static int gettextprop(Window w, Atom atom, char *text, unsigned int size);
 static void grabbuttons(Client *c, int focused);
 static void grabkeys(void);
@@ -251,6 +252,7 @@ static void sigchld(int unused);
 static void sighup(int unused);
 static void sigterm(int unused);
 static void spawn(const Arg *arg);
+static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -771,7 +773,7 @@ createmon(void)
 	return m;
 }
 
-Monitor *
+static Monitor *
 systraytomon(Monitor *m) {
 	Monitor *t;
 	int i, n;
@@ -1065,8 +1067,8 @@ getstate(Window w)
 	return result;
 }
 
-unsigned int
-getsystraywidth()
+static unsigned int
+getsystraywidth(void)
 {
 	unsigned int w = 0;
 	Client *i;
@@ -1474,7 +1476,7 @@ recttomon(int x, int y, int w, int h)
 	return r;
 }
 
-void
+static void
 removesystrayicon(Client *i)
 {
 	Client **ii;
@@ -1494,7 +1496,7 @@ resize(Client *c, int x, int y, int w, int h, int interact)
 		resizeclient(c, x, y, w, h);
 }
 
-void
+static void
 resizebarwin(Monitor *m) {
 	unsigned int w = m->ww;
 	if (showsystray && m == systraytomon(m) && !systrayonleft)
@@ -1517,7 +1519,7 @@ resizeclient(Client *c, int x, int y, int w, int h)
 	XSync(dpy, False);
 }
 
-void
+static void
 resizerequest(XEvent *e)
 {
 	XResizeRequestEvent *ev = &e->xresizerequest;
@@ -2494,7 +2496,7 @@ updatestatus(void)
 	updatesystray();
 }
 
-void
+static void
 updatesystrayicongeom(Client *i, int w, int h)
 {
 	if (i) {
@@ -2517,7 +2519,7 @@ updatesystrayicongeom(Client *i, int w, int h)
 	}
 }
 
-void
+static void
 updatesystrayiconstate(Client *i, XPropertyEvent *ev)
 {
 	long flags;
@@ -2545,7 +2547,7 @@ updatesystrayiconstate(Client *i, XPropertyEvent *ev)
 	updatesystray();
 }
 
-void
+static void
 updatesystray(void)
 {
 	unsigned int w = 0;
@@ -2694,7 +2696,7 @@ wintomon(Window w)
 	return selmon;
 }
 
-Client *
+static Client *
 wintosystrayicon(Window w) {
 	if (!showsystray || !systray)
 		return NULL;
