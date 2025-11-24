@@ -67,24 +67,11 @@ while true; do
 		fi
 	fi
 
-	# Bluetooth
-	bt=""
-	if command -v bluetoothctl >/dev/null 2>&1; then
-		bt_state=$(bluetoothctl show 2>/dev/null | grep "Powered:" | awk '{print $2}')
-		if [ "$bt_state" = "yes" ]; then
-			bt_dev=$(bluetoothctl devices Connected 2>/dev/null | head -1 | cut -d' ' -f3-)
-			[ -z "$bt_dev" ] && bt_dev="On"
-			bt="🔵 $bt_dev"
-		else
-			bt="🔵 Off"
-		fi
-	fi
-
 	# Clock
 	time="$(date '+%Y-%m-%d %H:%M:%S')"
 
-	# Update dwm bar (format with separators for click detection)
-	xsetroot -name "${batt} | ${wifi} | ${bt} | ${vol} | ${time}"
+	# Update dwm bar
+	xsetroot -name "${batt} | ${wifi} | ${vol} | ${time}"
 	sleep 1
 done
 

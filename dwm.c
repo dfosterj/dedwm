@@ -230,7 +230,6 @@ static void sigchld(int unused);
 static void sighup(int unused);
 static void sigterm(int unused);
 static void spawn(const Arg *arg);
-static void statusclick(const Arg *arg);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
@@ -1928,20 +1927,6 @@ spawn(const Arg *arg)
 
 		execvp(((char **)arg->v)[0], (char **)arg->v);
 		die("dwm: execvp '%s' failed:", ((char **)arg->v)[0]);
-	}
-}
-
-void
-statusclick(const Arg *arg)
-{
-	/* Simple check: if status contains WiFi emoji, spawn wifi command */
-	/* If it contains Bluetooth emoji, spawn bluetooth command */
-	if (strstr(stext, "📶")) {
-		Arg a = {.v = wificmd};
-		spawn(&a);
-	} else if (strstr(stext, "🔵")) {
-		Arg a = {.v = btcmd};
-		spawn(&a);
 	}
 }
 

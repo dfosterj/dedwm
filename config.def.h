@@ -71,8 +71,6 @@ static const char *volup[]    = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", 
 static const char *voldown[]  = { "pactl", "set-sink-volume", "@DEFAULT_SINK@", "-5%", NULL };
 static const char *volmute[]  = { "pactl", "set-sink-mute", "@DEFAULT_SINK@", "toggle", NULL };
 static const char *wifitoggle[] = { "nmcli", "radio", "wifi", "toggle", NULL };
-static const char *wificmd[]  = { "st", "-e", "nmtui", NULL };
-static const char *btcmd[]    = { "st", "-e", "bluetuith", NULL };
 
 #include "movestack.c"
 static const Key keys[] = {
@@ -139,7 +137,6 @@ static const Button buttons[] = {
 	{ ClkLtSymbol,          0,              Button1,        setlayout,      {0} },
 	{ ClkLtSymbol,          0,              Button3,        setlayout,      {.v = &layouts[2]} },
 	{ ClkWinTitle,          0,              Button2,        zoom,           {0} },
-	{ ClkStatusText,        0,              Button1,        statusclick,    {0} },
 	{ ClkStatusText,        0,              Button2,        spawn,          {.v = termcmd } },
 	{ ClkClientWin,         MODKEY,         Button1,        movemouse,      {0} },
 	{ ClkClientWin,         MODKEY,         Button2,        togglefloating, {0} },
