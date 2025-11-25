@@ -2315,8 +2315,6 @@ updatebars(void)
 				CopyFromParent, DefaultVisual(dpy, screen),
 				CWOverrideRedirect|CWBackPixmap|CWEventMask, &wa);
 		XDefineCursor(dpy, m->barwin, cursor[CurNormal]->cursor);
-		if (showsystray && m == systraytomon(m))
-			XMapRaised(dpy, systray->win);
 		XMapRaised(dpy, m->barwin);
 		XSetClassHint(dpy, m->barwin, &ch);
 	}
@@ -2557,7 +2555,10 @@ updatesystray(void)
 	if (!systray) {
 		if (!(systray = (Systray *)calloc(1, sizeof(Systray))))
 			die("fatal: could not malloc() %u bytes\n", sizeof(Systray));
-		systray->win = XCreateSimpleWindow(dpy, root, 0, 0, 1, 1, 0, 0, 0);
+		/* Create window at correct position, but don't map it yet */
+		unsigned int x = selmon->wx + (systrayonleft ? 0 : selmon->ww - 1);
+		unsigned int y = selmon->by;
+		systray->win = XCreateSimpleWindow(dpy, root, x, y, 1, bh, 0, 0, 0);
 		if (!systray->win)
 			die("fatal: could not create systray window\n");
 		XSetWindowAttributes wa;
@@ -2584,6 +2585,7 @@ updatesystray(void)
 			ev.data.l[4] = 0;
 			XSendEvent(dpy, root, False, StructureNotifyMask, (XEvent *)&ev);
 		}
+		/* Don't map the window yet - it will be mapped when positioned correctly */
 	}
 	XSync(dpy, False);
 	for (i = systray->icons; i; i = i->next) {
@@ -2599,13 +2601,13 @@ updatesystray(void)
 		XUnmapWindow(dpy, systray->win);
 		return;
 	}
-	XMapRaised(dpy, systray->win);
 	XSetWindowAttributes wa;
 	wa.event_mask = ButtonPressMask | ExposureMask;
 	wa.override_redirect = True;
 	wa.background_pixel = scheme[SchemeNorm][ColBg].pixel;
 	XChangeWindowAttributes(dpy, systray->win, CWEventMask|CWOverrideRedirect|CWBackPixel, &wa);
 	XSelectInput(dpy, systray->win, SubstructureNotifyMask);
+	/* Position the window before mapping it */
 	XMoveResizeWindow(dpy, systray->win, selmon->wx + (systrayonleft ? 0 : selmon->ww - w), selmon->by, w, bh);
 	XMapRaised(dpy, systray->win);
 	XClassHint ch = {"dwm", "dwm"};
