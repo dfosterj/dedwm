@@ -242,6 +242,8 @@ static Monitor *systraytomon(Monitor *m);
 static void tag(const Arg *arg);
 static void tagmon(const Arg *arg);
 static void tile(Monitor *m);
+static void viewnext(const Arg *arg);
+static void viewprev(const Arg *arg);
 static void togglebar(const Arg *arg);
 static void togglefloating(const Arg *arg);
 static void toggletag(const Arg *arg);
@@ -2534,6 +2536,48 @@ view(const Arg *arg)
 		selmon->tagset[selmon->seltags] = arg->ui & TAGMASK;
 	focus(NULL);
 	arrange(selmon);
+}
+
+void
+viewnext(const Arg *arg)
+{
+	unsigned int i, curtags, newtags;
+	int j;
+
+	curtags = selmon->tagset[selmon->seltags];
+	for (i = 0; i < LENGTH(tags); i++) {
+		if (curtags & (1 << i)) {
+			j = i + 1;
+			if (j >= LENGTH(tags))
+				j = 0;
+			newtags = 1 << j;
+			view(&(const Arg){.ui = newtags});
+			return;
+		}
+	}
+	/* if no tag is selected, go to first tag */
+	view(&(const Arg){.ui = 1 << 0});
+}
+
+void
+viewprev(const Arg *arg)
+{
+	unsigned int i, curtags, newtags;
+	int j;
+
+	curtags = selmon->tagset[selmon->seltags];
+	for (i = 0; i < LENGTH(tags); i++) {
+		if (curtags & (1 << i)) {
+			j = i - 1;
+			if (j < 0)
+				j = LENGTH(tags) - 1;
+			newtags = 1 << j;
+			view(&(const Arg){.ui = newtags});
+			return;
+		}
+	}
+	/* if no tag is selected, go to last tag */
+	view(&(const Arg){.ui = 1 << (LENGTH(tags) - 1)});
 }
 
 Client *

@@ -20,15 +20,16 @@ static const char col_gray2[]       = "#444444";
 static const char col_gray3[]       = "#bbbbbb";
 static const char col_gray4[]       = "#eeeeee";
 static const char col_cyan[]        = "#005577";
+static const char col_white[]       = "#ffffff";
 static const char *colorsdark[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray3, col_gray1, col_gray2 },
-	[SchemeSel]  = { col_gray4, col_cyan,  col_cyan  },
+	[SchemeNorm] = { col_white, col_gray1, col_gray2 },
+	[SchemeSel]  = { col_white, col_gray1, col_gray2 },
 };
 static const char *colorslight[][3]      = {
 	/*               fg         bg         border   */
-	[SchemeNorm] = { col_gray1, col_gray3, col_gray2 },
-	[SchemeSel]  = { col_cyan,  col_gray4, col_cyan  },
+	[SchemeNorm] = { col_white, col_gray3, col_gray2 },
+	[SchemeSel]  = { col_white, col_gray3, col_gray2 },
 };
 
 /* tagging */
@@ -106,6 +107,8 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_period, focusmon,       {.i = +1 } },
 	{ MODKEY|ShiftMask,             XK_comma,  tagmon,         {.i = -1 } },
 	{ MODKEY|ShiftMask,             XK_period, tagmon,         {.i = +1 } },
+	{ MODKEY|ControlMask,           XK_Left,   viewprev,       {0} },
+	{ MODKEY|ControlMask,           XK_Right,  viewnext,       {0} },
 	TAGKEYS(                        XK_1,                      0)
 	TAGKEYS(                        XK_2,                      1)
 	TAGKEYS(                        XK_3,                      2)

@@ -86,11 +86,6 @@ make clean install
 - **PulseAudio** (`pactl`) - Audio system for volume control
 - **NetworkManager** (`nmcli`) - Network management (for WiFi toggle)
 
-### Optional Tools
-- **feh** - Image viewer/wallpaper setter (preferred)
-- **nitrogen** - Alternative wallpaper setter
-- **xwallpaper** - Alternative wallpaper setter
-
 ### Dark/Light Mode
 dwm automatically switches between dark and light color schemes based on the presence of `~/.lightmode`:
 - If `~/.lightmode` exists: uses light color scheme
@@ -102,6 +97,14 @@ dwm automatically switches between dark and light color schemes based on the pre
 Simple gaps between windows (6px by default, configurable via `gappx` in `config.def.h`):
 - Gaps are automatically removed in monocle layout or when only one window is visible
 - Gaps are applied in tiled layouts when multiple windows are present
+
+## Recent Changes
+
+- **Removed**: `autostart` patch (no longer using autostart scripts)
+- **Removed**: `vanitygaps` patch (replaced with simpler `uselessgap`)
+- **Added**: `autodarkmode` patch (automatic dark/light mode switching)
+- **Added**: `uselessgap` patch (simple 6px gaps between windows)
+- **Customization**: dmenu now appears at bottom of screen (`-b` flag)
 
 ## Patches Applied
 
