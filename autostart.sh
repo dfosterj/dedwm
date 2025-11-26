@@ -1,4 +1,9 @@
 #!/bin/sh
+#
+# Add to your ~/.xinitrc:
+#   ~/.config/dwm/autostart.sh &
+#   exec dwm
+#
 
 # Start status bar as separate background process
 (exec -a dwmbar_extra sh -c '
