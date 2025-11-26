@@ -33,9 +33,9 @@ while true; do
 	if [ -d /sys/class/power_supply/BAT0 ]; then
 		cap=$(cat /sys/class/power_supply/BAT0/capacity 2>/dev/null)
 		stat=$(cat /sys/class/power_supply/BAT0/status 2>/dev/null)
-		symbol="⚡"
-		[ "$stat" = "Charging" ] && symbol="🔌"
-		[ "$stat" = "Discharging" ] && symbol="🔋"
+		symbol="BAT"
+		[ "$stat" = "Charging" ] && symbol="CHG"
+		[ "$stat" = "Discharging" ] && symbol="BAT"
 		batt="$symbol $cap%"
 	fi
 
@@ -46,10 +46,10 @@ while true; do
 		if [ -n "$sink" ]; then
 			mute=$(pactl get-sink-mute "$sink" 2>/dev/null | grep -o "yes\|no")
 			if [ "$mute" = "yes" ]; then
-				vol="🔇 Muted"
+				vol="VOL Muted"
 			else
 				pct=$(pactl get-sink-volume "$sink" 2>/dev/null | head -1 | awk '{print $5}' | tr -d '%')
-				[ -n "$pct" ] && vol="🔊 $pct%"
+				[ -n "$pct" ] && vol="VOL $pct%"
 			fi
 		fi
 	fi
@@ -61,14 +61,14 @@ while true; do
 		if [ "$wifi_state" = "enabled" ]; then
 			ssid=$(nmcli -t -f ACTIVE,SSID dev wifi 2>/dev/null | grep '^yes:' | cut -d':' -f2)
 			[ -z "$ssid" ] && ssid="Disconnected"
-			wifi="📶 $ssid"
+			wifi="WIFI $ssid"
 		else
-			wifi="📶 Off"
+			wifi="WIFI Off"
 		fi
 	fi
 
 	# Clock
-	time="$(date '+%Y-%m-%d %H:%M:%S')"
+	time="$(date '+%Y-%m-%d %I:%M:%S %p')"
 
 	# Update dwm bar
 	xsetroot -name "${batt} | ${wifi} | ${vol} | ${time}"
