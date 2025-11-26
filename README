@@ -8,9 +8,9 @@ This fork includes the following patches:
 - **attachaside** - New windows attach at the side of the focused window
 - **movestack** - Move clients up/down in the stack (Mod+Shift+j/k)
 - **systray** - System tray support in the status bar
-- **vanitygaps** - Configurable gaps between windows
+- **uselessgap** - Simple gaps between windows (6px by default)
+- **autodarkmode** - Automatic dark/light mode switching based on `~/.lightmode` file
 - **restartsig** - Restart dwm with signals or Mod+Ctrl+Shift+q
-- **autostart** - Automatically run scripts on startup
 
 ## Customizations
 
@@ -24,8 +24,8 @@ This fork includes the following patches:
   - `Mod+-` / `Mod+=` - Volume down/up
   - `Mod+m` - Toggle mute
   - `Mod+w` - Toggle WiFi
-- **Status Bar**: Displays battery, WiFi, volume, and clock information (via autostart script)
-- **Wallpaper**: Automatically sets wallpaper from `wallpaper/drwp1.jpeg` (via autostart script)
+- **Dmenu**: Appears at the bottom of the screen (`-b` flag)
+- **Dark/Light Mode**: Automatically switches based on presence of `~/.lightmode` file. Send SIGHUP to dwm to refresh mode.
 
 ## Requirements
 
@@ -50,17 +50,7 @@ This fork includes the following patches:
    make clean install
    ```
 
-3. Install autostart scripts (required for status bar and wallpaper):
-   ```bash
-   ./install-autostart.sh
-   ```
-   
-   This installs the autostart script to `~/.local/share/dwm/autostart.sh` (or `~/.dwm/autostart.sh`).
-   The script will automatically run when dwm starts and handles:
-   - Setting the wallpaper
-   - Updating the status bar with system information
-
-4. Add to your `.xinitrc`:
+3. Add to your `.xinitrc`:
    ```bash
    exec dwm
    ```
@@ -93,12 +83,12 @@ make clean install
 - **nitrogen** - Alternative wallpaper setter
 - **xwallpaper** - Alternative wallpaper setter
 
-### Status Bar
-The status bar automatically displays (updated every second via autostart script):
-- Battery status with icon and percentage (if `/sys/class/power_supply/BAT0` exists)
-- WiFi status with SSID or "Off" (via NetworkManager)
-- Volume level and mute status (via PulseAudio)
-- Current date and time (YYYY-MM-DD HH:MM:SS format)
+### Dark/Light Mode
+dwm automatically switches between dark and light color schemes based on the presence of `~/.lightmode`:
+- If `~/.lightmode` exists: uses light color scheme
+- If `~/.lightmode` doesn't exist: uses dark color scheme (default)
+- To switch modes: create/remove `~/.lightmode` and send SIGHUP to dwm: `pkill -SIGHUP dwm`
+- Can be integrated with tools like `darkman` or `Redshift` for automatic switching
 
 ## Patches Applied
 
@@ -106,9 +96,9 @@ All patches are located in the `patches/` directory:
 - `dwm-attachaside-6.6.diff`
 - `dwm-movestack-20211115-a786211.diff`
 - `dwm-systray-6.6.diff`
-- `dwm-vanitygaps-20190508-6.2.diff`
+- `dwm-uselessgap-20211119-58414bee958f2.diff`
+- `dwm-autodarkmode-20250224-6.5.diff`
 - `dwm-restartsig-20180523-6.2.diff`
-- `dwm-autostart-20210120-cb3f58a.diff`
 
 ## License
 
