@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 #
 # Add to your ~/.xinitrc:
 #   ~/.config/dwm/autostart.sh &
