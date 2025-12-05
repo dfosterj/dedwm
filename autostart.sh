@@ -24,10 +24,10 @@ dwmblocks &
 ###############################################################################
 
 WALLPAPER=""
-if [ -f "$HOME/.config/dwm/wallpaper/drwp1.jpeg" ]; then
-    WALLPAPER="$HOME/.config/dwm/wallpaper/drwp1.jpeg"
-elif [ -f "/usr/local/share/dwm/wallpaper/drwp1.jpeg" ]; then
-    WALLPAPER="/usr/local/share/dwm/wallpaper/drwp1.jpeg"
+if [ -f "$HOME/.config/dwm/wallpaper/gruvbox.png" ]; then
+    WALLPAPER="$HOME/.config/dwm/wallpaper/gruvbox.png"
+elif [ -f "/usr/local/share/dwm/wallpaper/gruvbox.png" ]; then
+    WALLPAPER="/usr/local/share/dwm/wallpaper/gruvbox.png"
 fi
 
 if [ -n "$WALLPAPER" ] && [ -f "$WALLPAPER" ]; then
